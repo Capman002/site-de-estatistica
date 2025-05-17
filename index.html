@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análises Estatísticas Interativas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.18.2/plotly.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Atividades de Estatistica</h1>
+            <p>Essa página contém as 3 atividades solicitadas pelo professor, explicação e resultados</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('distribuicao')">
+                <i class="fas fa-chart-pie"></i>
+                Distribuição de Frequência
+            </button>
+            <button class="nav-tab" onclick="showTab('boxplot')">
+                <i class="fas fa-chart-bar"></i>
+                Boxplot & Histogramas
+            </button>
+            <button class="nav-tab" onclick="showTab('histograma')">
+                <i class="fas fa-chart-area"></i>
+                Tempo de Falha
+            </button>
+        </div>
+
+        <!-- ATIVIDADE 1: DISTRIBUIÇÃO DE FREQUÊNCIA -->
+        <div id="distribuicao" class="tab-content active">
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h2><i class="fas fa-chart-pie"></i> Atividade 1: Distribuição de Frequência</h2>
+                    <p>Análise da Velocidade de Processamento entre Máquinas</p>
+                </div>
+                <div class="activity-content">
+                    <div class="enunciado">
+                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
+                        <p>Os valores apresentados referem-se à velocidade de processamento, em milissegundos, de um mesmo algoritmo, em duas máquinas do mesmo modelo (mesmo fabricante, mesmo ambiente) sendo 30 observações obtidas na máquina A e 30 na máquina B.</p>
+                        <br>
+                        <strong>Pede-se:</strong>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>a) Classificar a variável estudada</li>
+                            <li>b) Construir tabela de distribuição de Frequência Simples e gráfico de setores</li>
+                            <li>c) Construir tabela de distribuição de Frequência com Intervalo de Classes</li>
+                            <li>d) Comparar as duas formas de apresentar os dados</li>
+                        </ul>
+                    </div>
+
+                    <div class="data-input-section">
+                        <h3><i class="fas fa-keyboard"></i> Inserção de Dados</h3>
+                        <div class="input-group">
+                            <label for="maquinaA">Dados da Máquina A (separados por vírgula):</label>
+                            <textarea id="maquinaA" class="data-textarea" placeholder="88.24, 87.58, 87.99, 87.89, 88.04..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="maquinaB">Dados da Máquina B (separados por vírgula):</label>
+                            <textarea id="maquinaB" class="data-textarea" placeholder="87.80, 88.13, 88.22, 88.15, 88.08..."></textarea>
+                        </div>
+                        <button class="btn" onclick="processarDistribuicao()">
+                            <i class="fas fa-play"></i>
+                            Processar Análise
+                        </button>
+                        <button class="btn" onclick="carregarDadosExemplo1()">
+                            <i class="fas fa-download"></i>
+                            Carregar Dados Exemplo
+                        </button>
+                        <div class="export-buttons" id="export-btns-1" style="display: none;">
+                            <button class="btn btn-export" onclick="exportarPDF('distribuicao', 'Atividade_1_Distribuicao_Frequencia')">
+                                <i class="fas fa-file-pdf"></i>
+                                Exportar PDF
+                            </button>
+                            <button class="btn btn-export" onclick="exportarHTML('distribuicao', 'Atividade_1_Distribuicao_Frequencia')">
+                                <i class="fas fa-file-code"></i>
+                                Exportar HTML
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="resultados-distribuicao" class="results-section" style="display: none;">
+                        <h3><i class="fas fa-chart-line"></i> Resultados da Análise</h3>
+                        
+                        <div class="alert alert-info">
+                            <strong>Classificação da Variável:</strong> A variável velocidade de processamento é <strong>quantitativa contínua</strong>, pois representa uma medida numérica que pode assumir valores decimais infinitos.
+                        </div>
+
+                        <div id="tabela-frequencia-simples"></div>
+                        <div id="grafico-pizza-simples" class="chart-container"></div>
+                        
+                        <div id="tabela-frequencia-intervalos"></div>
+                        <div id="grafico-pizza-intervalos" class="chart-container"></div>
+                        
+                        <div class="interpretation">
+                            <h3><i class="fas fa-lightbulb"></i> Interpretação e Comparação</h3>
+                            <div id="comparacao-resultados"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATIVIDADE 2: BOXPLOT E HISTOGRAMÁS -->
+        <div id="boxplot" class="tab-content">
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h2><i class="fas fa-chart-bar"></i> Atividade 2: Boxplot e Histogramas</h2>
+                    <p>Construção e Interpretação de Boxplots Comparativos</p>
+                </div>
+                <div class="activity-content">
+                    <div class="enunciado">
+                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
+                        <p>Utilizando os mesmos dados de velocidade de processamento das duas máquinas:</p>
+                        <br>
+                        <strong>Pede-se:</strong>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>1) Classificar a variável e construir um histograma para cada máquina</li>
+                            <li>2) Construir gráfico de BOXPLOT para as duas distribuições e comparar</li>
+                            <li>3) Identificar possível presença de outliers</li>
+                        </ul>
+                    </div>
+
+                    <div class="data-input-section">
+                        <h3><i class="fas fa-keyboard"></i> Inserção de Dados</h3>
+                        <div class="input-group">
+                            <label for="maquinaA2">Dados da Máquina A:</label>
+                            <textarea id="maquinaA2" class="data-textarea" placeholder="88.24, 87.58, 87.99..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="maquinaB2">Dados da Máquina B:</label>
+                            <textarea id="maquinaB2" class="data-textarea" placeholder="87.80, 88.13, 88.22..."></textarea>
+                        </div>
+                        <button class="btn" onclick="processarBoxplot()">
+                            <i class="fas fa-play"></i>
+                            Processar Análise
+                        </button>
+                        <button class="btn" onclick="carregarDadosExemplo2()">
+                            <i class="fas fa-download"></i>
+                            Carregar Dados Exemplo
+                        </button>
+                        <div class="export-buttons" id="export-btns-2" style="display: none;">
+                            <button class="btn btn-export" onclick="exportarPDF('boxplot', 'Atividade_2_Boxplot_Histogramas')">
+                                <i class="fas fa-file-pdf"></i>
+                                Exportar PDF
+                            </button>
+                            <button class="btn btn-export" onclick="exportarHTML('boxplot', 'Atividade_2_Boxplot_Histogramas')">
+                                <i class="fas fa-file-code"></i>
+                                Exportar HTML
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="resultados-boxplot" class="results-section" style="display: none;">
+                        <h3><i class="fas fa-chart-line"></i> Resultados da Análise</h3>
+                        
+                        <div class="alert alert-info">
+                            <strong>Classificação da Variável:</strong> Velocidade de processamento - variável <strong>quantitativa contínua</strong>.
+                        </div>
+
+                        <h4>Histogramas Comparativos</h4>
+                        <div id="histograma-maquinaA" class="histogram-container"></div>
+                        <div id="histograma-maquinaB" class="histogram-container"></div>
+
+                        <h4>Boxplot Comparativo</h4>
+                        <div id="boxplot-grafico" class="boxplot-container"></div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h4>Máquina A - Média</h4>
+                                <div class="value" id="media-a">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Máquina B - Média</h4>
+                                <div class="value" id="media-b">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Desvio Padrão A</h4>
+                                <div class="value" id="desvio-a">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Desvio Padrão B</h4>
+                                <div class="value" id="desvio-b">-</div>
+                            </div>
+                        </div>
+
+                        <div class="interpretation">
+                            <h3><i class="fas fa-lightbulb"></i> Interpretação dos Resultados</h3>
+                            <div id="interpretacao-boxplot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATIVIDADE 3: TEMPO DE FALHA -->
+        <div id="histograma" class="tab-content">
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h2><i class="fas fa-chart-area"></i> Atividade 3: Análise de Tempo de Falha</h2>
+                    <p>Estudo de Caso - Componentes Eletrônicos</p>
+                </div>
+                <div class="activity-content">
+                    <div class="enunciado">
+                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
+                        <p>No laboratório de qualidade da Empresa Delta Componentes Ltda, um engenheiro realizou testes para investigar os tempos de falha (em horas) de componentes eletrônicos sujeitos a teste acelerado. Foram feitas 100 observações aleatórias.</p>
+                        <br>
+                        <strong>Pede-se:</strong>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>1) Classificar a variável estudada</li>
+                            <li>2) Construir tabela de distribuição de frequência por classes</li>
+                            <li>3) Traçar o Histograma da distribuição</li>
+                            <li>4) Comparar com tipos teóricos e identificar o mais próximo</li>
+                            <li>5) Concluir sobre o tipo de distribuição</li>
+                        </ul>
+                    </div>
+
+                    <div class="data-input-section">
+                        <h3><i class="fas fa-keyboard"></i> Inserção de Dados</h3>
+                        <div class="input-group">
+                            <label for="temposFalha">Tempos de Falha (em horas):</label>
+                            <textarea id="temposFalha" class="data-textarea" placeholder="129, 124, 121, 123, 127, 136..."></textarea>
+                        </div>
+                        <button class="btn" onclick="processarTempoFalha()">
+                            <i class="fas fa-play"></i>
+                            Processar Análise
+                        </button>
+                        <button class="btn" onclick="carregarDadosExemplo3()">
+                            <i class="fas fa-download"></i>
+                            Carregar Dados Exemplo
+                        </button>
+                        <div class="export-buttons" id="export-btns-3" style="display: none;">
+                            <button class="btn btn-export" onclick="exportarPDF('histograma', 'Atividade_3_Tempo_Falha')">
+                                <i class="fas fa-file-pdf"></i>
+                                Exportar PDF
+                            </button>
+                            <button class="btn btn-export" onclick="exportarHTML('histograma', 'Atividade_3_Tempo_Falha')">
+                                <i class="fas fa-file-code"></i>
+                                Exportar HTML
+                            </button>
+                        </div>
+                        <div class="sample-data">
+                            <strong>Dados exemplo:</strong> 129, 124, 121, 123, 127, 136, 134, 130, 130, 129...
+                        </div>
+                    </div>
+
+                    <div id="resultados-tempo-falha" class="results-section" style="display: none;">
+                        <h3><i class="fas fa-chart-line"></i> Resultados da Análise</h3>
+                        
+                        <div class="alert alert-info">
+                            <strong>Classificação da Variável:</strong> Tempo de falha - variável <strong>quantitativa contínua</strong>.
+                        </div>
+
+                        <div id="tabela-tempo-falha"></div>
+                        <div id="histograma-tempo-falha" class="chart-container"></div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h4>Média</h4>
+                                <div class="value" id="media-tempo">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Mediana</h4>
+                                <div class="value" id="mediana-tempo">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Desvio Padrão</h4>
+                                <div class="value" id="desvio-tempo">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Assimetria</h4>
+                                <div class="value" id="assimetria-tempo">-</div>
+                            </div>
+                        </div>
+
+                        <div class="interpretation">
+                            <h3><i class="fas fa-lightbulb"></i> Análise do Tipo de Distribuição</h3>
+                            <div id="analise-distribuicao"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
