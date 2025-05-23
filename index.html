@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 <body>
     <div class="container">
@@ -31,6 +32,10 @@
             <button class="nav-tab" onclick="showTab('histograma')">
                 <i class="fas fa-chart-area"></i>
                 Tempo de Falha
+            </button>
+            <button class="nav-tab" onclick="showTab('analiseMaquinas')">
+                <i class="fas fa-balance-scale"></i> <!-- Or another appropriate icon -->
+                Análise de Variabilidade de Máquinas
             </button>
         </div>
 
@@ -101,6 +106,61 @@
                         <div class="interpretation">
                             <h3><i class="fas fa-lightbulb"></i> Interpretação e Comparação</h3>
                             <div id="comparacao-resultados"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATIVIDADE 4: ANÁLISE DE VARIABILIDADE DE MÁQUINAS -->
+        <div id="analiseMaquinas" class="tab-content">
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h2><i class="fas fa-balance-scale"></i> EXERCÍCIO INTERPRETAÇÃO VARIÂNCIA + DESVIO PADRÃO + COEFICIENTE DE VARIAÇÃO</h2>
+                    <p>Avaliação de máquinas X e Y para aquisição com base em estatísticas de produção.</p>
+                </div>
+                <div class="activity-content">
+                    <div class="enunciado">
+                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
+                        <div id="enunciado-maquinas">
+                            <!-- Problem statement will be populated here by another step -->
+                            <p>O enunciado completo será carregado aqui...</p>
+                        </div>
+                    </div>
+
+                    <div class="data-input-section"> <!-- Reusing class for consistent styling -->
+                        <h3><i class="fas fa-table"></i> Dados de Produção (Peças/Hora)</h3>
+                        <div id="dados-maquinas-producao">
+                            <!-- Production data table will be populated by JavaScript -->
+                        </div>
+                        <button class="btn" onclick="processarAnaliseMaquinas()">
+                            <i class="fas fa-play"></i>
+                            Analisar Dados e Mostrar Solução
+                        </button>
+                        <!-- No export buttons for now, can be added later if needed -->
+                    </div>
+
+                    <div id="resultados-analise-maquinas" class="results-section" style="display: none;">
+                        <h3><i class="fas fa-chart-line"></i> Análise Estatística e Recomendação</h3>
+                        
+                        <h4>Dados de Produção Utilizados:</h4>
+                        <div id="dados-maquinas-display">
+                            <!-- Data table will be redisplayed here by JS -->
+                        </div>
+
+                        <h4>Cálculos Detalhados:</h4>
+                        <div id="calculos-maquinas">
+                            <!-- Detailed calculations will be populated here by JavaScript -->
+                        </div>
+
+                        <h4>Gráficos Comparativos:</h4>
+                        <div id="graficos-maquinas" class="chart-container" style="min-height: 300px;">
+                            <!-- Charts will be populated here by JavaScript -->
+                        </div>
+                        
+                        <h4>Interpretação e Considerações:</h4>
+                        <div id="interpretacao-maquinas" class="interpretation">
+                            <!-- Interpretation and recommendation will be populated here by JavaScript -->
                         </div>
                     </div>
                 </div>

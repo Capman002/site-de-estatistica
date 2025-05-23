@@ -5,6 +5,11 @@ const dadosExemplo = {
     temposFalha: [129, 124, 121, 123, 127, 136, 134, 130, 130, 129, 125, 123, 136, 131, 124, 123, 129, 133, 133, 125, 131, 120, 137, 125, 132, 120, 130, 125, 125, 131, 124, 119, 125, 133, 124, 136, 128, 133, 133, 136, 130, 128, 124, 141, 131, 128, 129, 129, 129, 130, 136, 133, 128, 125, 141, 133, 128, 125, 125, 139, 128, 129, 129, 129, 138, 137, 129, 129, 129, 128, 129, 124, 130, 131, 129, 136, 131, 131, 131, 129, 121, 142, 122, 129, 121, 142, 136, 129, 129, 121, 128, 135, 140, 126, 125, 121, 129, 126, 126, 128]
 };
 
+const dadosMaquinasAnalise = {
+    X: [35, 36, 49, 44, 43, 37, 38, 42, 39, 40], // Soma 403
+    Y: [25, 26, 55, 52, 48, 24, 34, 47, 50, 47]  // Soma 408
+};
+
 // Função para trocar abas
 function showTab(tabName) {
     // Esconder todas as abas
@@ -1187,4 +1192,277 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarDadosExemplo1();
     carregarDadosExemplo2();
     carregarDadosExemplo3();
+    // Carregar o enunciado da Atividade 4
+    carregarEnunciadoAnaliseMaquinas();
 });
+
+// Helper function para formatar números
+function formatNumber(num, decimals = 2) {
+    return Number(num.toFixed(decimals));
+}
+
+// Função para carregar o enunciado da Atividade 4
+function carregarEnunciadoAnaliseMaquinas() {
+    const enunciadoDiv = document.getElementById('enunciado-maquinas');
+    if (enunciadoDiv) {
+        enunciadoDiv.innerHTML = `
+            <h4><strong>EXERCÍCIO INTERPRETAÇÃO VARIÂNCIA + DESVIO PADRÃO + COEFICIENTE DE VARIAÇÃO</strong></h4>
+            <p><strong>Situação problema:</strong> Uma fabricante de autopeças precisa renovar seu parque fabril para atender a demanda imposta pelo mercado consumidor. [cite: 1] Para isso, está avaliando a aquisição de dois tipos diferentes de máquina, X e Y, que são projetadas para produzir o mesmo produto e comercializadas pelo mesmo preço. [cite: 2] Para tomar a decisão correta, com base em informações não subjetivas, o fabricante enviou você, como engenheiro mecatrônico, para avaliar estas máquinas e indicar qual deve ser adquirida. [cite: 3]</p>
+            <p>Considerando seus conhecimentos de estatística, você decidiu observar a produção das máquinas sob avaliação, coletando informações das produções horárias, ao longo de 10 horas de operação, como segue: [cite: 4]</p>
+            <p><strong>Produção em peças/hora</strong> [cite: 6]</p>
+            <div class="table-container">
+                <table class="table-auto" style="width: 50%; margin: 10px auto; border: 1px solid #ccc;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ccc; padding: 5px;">X</th>
+                            <th style="border: 1px solid #ccc; padding: 5px;">Y</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">35</td><td style="border: 1px solid #ccc; padding: 5px;">25</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">36</td><td style="border: 1px solid #ccc; padding: 5px;">26</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">49</td><td style="border: 1px solid #ccc; padding: 5px;">55</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">44</td><td style="border: 1px solid #ccc; padding: 5px;">52</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">43</td><td style="border: 1px solid #ccc; padding: 5px;">48</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">37</td><td style="border: 1px solid #ccc; padding: 5px;">24</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">38</td><td style="border: 1px solid #ccc; padding: 5px;">34</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">42</td><td style="border: 1px solid #ccc; padding: 5px;">47</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">39</td><td style="border: 1px solid #ccc; padding: 5px;">50</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;">40</td><td style="border: 1px solid #ccc; padding: 5px;">47</td></tr>
+                        <tr><td style="border: 1px solid #ccc; padding: 5px;"><strong>Soma 403</strong></td><td style="border: 1px solid #ccc; padding: 5px;"><strong>Soma 408</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Considerando os conceitos, e respectivas interpretações de VARIÂNCIA, DESVIO PADRÃO e COEFICIENTE DE VARIAÇÃO, indique qual das máquinas deve ser adquirida por seu empregador, apresentando gráficos/cálculos/ferramentas computacionais empregadas, E SUAS CONSIDERAÇÕES. [cite: 6]</p>
+            <p><em>Solução mais completa receberá nota máxima, e se tornará base para o cálculo das demais notas. ATIVIDADE INDIVIDUAL. [cite: 7]</em></p>
+        `;
+    }
+     // Pré-carregar a tabela de dados de produção na seção de input
+    const dadosProducaoDiv = document.getElementById('dados-maquinas-producao');
+    if (dadosProducaoDiv) {
+        let tableHTML = `
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Máquina X (Peças/Hora)</th>
+                            <th>Máquina Y (Peças/Hora)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        for (let i = 0; i < Math.max(dadosMaquinasAnalise.X.length, dadosMaquinasAnalise.Y.length); i++) {
+            tableHTML += `
+                <tr>
+                    <td>${dadosMaquinasAnalise.X[i] !== undefined ? dadosMaquinasAnalise.X[i] : '-'}</td>
+                    <td>${dadosMaquinasAnalise.Y[i] !== undefined ? dadosMaquinasAnalise.Y[i] : '-'}</td>
+                </tr>
+            `;
+        }
+        tableHTML += `
+                    </tbody>
+                </table>
+            </div>
+        `;
+        dadosProducaoDiv.innerHTML = tableHTML;
+    }
+}
+
+
+// ATIVIDADE 4: ANÁLISE DE VARIABILIDADE DE MÁQUINAS
+function processarAnaliseMaquinas() {
+    const dataX = dadosMaquinasAnalise.X;
+    const dataY = dadosMaquinasAnalise.Y;
+
+    function calcularMetricas(dados, nomeMaquina) {
+        const n = dados.length;
+        const sum = dados.reduce((acc, val) => acc + val, 0);
+        const mean = sum / n;
+        
+        const squaredDifferences = dados.map(val => Math.pow(val - mean, 2));
+        const sumSquaredDiff = squaredDifferences.reduce((acc, val) => acc + val, 0);
+        
+        const variance = sumSquaredDiff / n; // Population variance
+        const stdDev = Math.sqrt(variance); // Population standard deviation
+        const cv = (stdDev / mean) * 100;
+
+        return {
+            nome: nomeMaquina,
+            dados: dados,
+            sum: formatNumber(sum),
+            n: n,
+            mean: formatNumber(mean),
+            squaredDifferences: squaredDifferences.map(d => formatNumber(d)),
+            sumSquaredDiff: formatNumber(sumSquaredDiff),
+            variance: formatNumber(variance),
+            stdDev: formatNumber(stdDev),
+            cv: formatNumber(cv)
+        };
+    }
+
+    const metricasX = calcularMetricas(dataX, 'Máquina X');
+    const metricasY = calcularMetricas(dataY, 'Máquina Y');
+
+    // 1. Display Raw Data Table (re-display in results)
+    const dadosDisplayDiv = document.getElementById('dados-maquinas-display');
+    let dadosTableHTML = `
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Máquina X (Peças/Hora)</th>
+                        <th>Máquina Y (Peças/Hora)</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    for (let i = 0; i < Math.max(metricasX.dados.length, metricasY.dados.length); i++) {
+        dadosTableHTML += `
+            <tr>
+                <td>${metricasX.dados[i] !== undefined ? metricasX.dados[i] : '-'}</td>
+                <td>${metricasY.dados[i] !== undefined ? metricasY.dados[i] : '-'}</td>
+            </tr>
+        `;
+    }
+    dadosTableHTML += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    dadosDisplayDiv.innerHTML = dadosTableHTML;
+
+
+    // 2. Display Detailed Calculations
+    const calculosDiv = document.getElementById('calculos-maquinas');
+    let calculosHTML = '';
+
+    [metricasX, metricasY].forEach(m => {
+        calculosHTML += `
+            <div class="calculation-block">
+                <h3>${m.nome}</h3>
+                <p><strong>Dados:</strong> ${m.dados.join(', ')}</p>
+                <p><strong>Soma:</strong> ${m.sum}</p>
+                <p><strong>N (Número de observações):</strong> ${m.n}</p>
+                <p><strong>Média (μ):</strong> ${m.sum} / ${m.n} = <strong>${m.mean}</strong></p>
+                
+                <h4>Cálculo da Variância (σ²)</h4>
+                <div class="table-container" style="max-height: 200px; overflow-y: auto;">
+                    <table>
+                        <thead><tr><th>Valor (xᵢ)</th><th>Desvio (xᵢ - μ)</th><th>Desvio ao Quadrado ((xᵢ - μ)²)</th></tr></thead>
+                        <tbody>
+                            ${m.dados.map(val => `<tr><td>${val}</td><td>${formatNumber(val - m.mean)}</td><td>${formatNumber(Math.pow(val - m.mean, 2))}</td></tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Soma dos Desvios ao Quadrado (SS):</strong> ${m.sumSquaredDiff}</p>
+                <p><strong>Variância Populacional (σ²):</strong> SS / N = ${m.sumSquaredDiff} / ${m.n} = <strong>${m.variance}</strong></p>
+                
+                <h4>Cálculo do Desvio Padrão (σ)</h4>
+                <p><strong>Desvio Padrão (σ):</strong> √σ² = √${m.variance} = <strong>${m.stdDev}</strong></p>
+                
+                <h4>Cálculo do Coeficiente de Variação (CV)</h4>
+                <p><strong>Coeficiente de Variação (CV):</strong> (σ / μ) * 100 = (${m.stdDev} / ${m.mean}) * 100 = <strong>${m.cv}%</strong></p>
+            </div>
+        `;
+    });
+    calculosDiv.innerHTML = calculosHTML;
+
+    // 3. Generate Interpretation and Recommendation
+    const interpretacaoDiv = document.getElementById('interpretacao-maquinas');
+    let recomendacaoHTML = `
+        <h4>Entendendo as Métricas Estatísticas:</h4>
+        <p><strong>Variância (σ²):</strong> Mede a dispersão dos valores de produção em torno da média. Quanto maior a variância, mais os valores de produção horária variam.</p>
+        <p><strong>Desvio Padrão (σ):</strong> É a raiz quadrada da variância, expressa na mesma unidade dos dados (peças/hora). Ele indica o grau de variabilidade ou 'espalhamento' da produção em relação à média. Um desvio padrão menor significa produção mais uniforme.</p>
+        <p><strong>Coeficiente de Variação (CV):</strong> É uma medida de dispersão relativa, calculada como (Desvio Padrão / Média) * 100%. O CV é particularmente útil para comparar a variabilidade entre diferentes conjuntos de dados, especialmente se suas médias forem diferentes. Um CV menor indica uma produção mais consistente e homogênea em relação à sua própria média.</p>
+        
+        <h4>Análise Comparativa das Máquinas:</h4>
+        <p>Ao compararmos as duas máquinas:</p>
+        <ul>
+            <li>Máquina X: CV = ${metricasX.cv.toFixed(2)}% (Média: ${metricasX.mean.toFixed(2)}, DP: ${metricasX.stdDev.toFixed(2)})</li>
+            <li>Máquina Y: CV = ${metricasY.cv.toFixed(2)}% (Média: ${metricasY.mean.toFixed(2)}, DP: ${metricasY.stdDev.toFixed(2)})</li>
+        </ul>
+    `;
+
+    const maquinaRecomendada = metricasX.cv < metricasY.cv ? 'X' : 'Y';
+    const maquinaAlternativa = metricasX.cv < metricasY.cv ? 'Y' : 'X';
+    const cvRecomendada = maquinaRecomendada === 'X' ? metricasX.cv : metricasY.cv;
+    const cvAlternativa = maquinaAlternativa === 'X' ? metricasX.cv : metricasY.cv;
+    const mediaRecomendada = maquinaRecomendada === 'X' ? metricasX.mean : metricasY.mean;
+    const mediaAlternativa = maquinaAlternativa === 'X' ? metricasX.mean : metricasY.mean;
+
+    if (metricasX.cv !== metricasY.cv) {
+        recomendacaoHTML += `
+            <p>A Máquina ${maquinaRecomendada} apresentou um Coeficiente de Variação (${cvRecomendada.toFixed(2)}%) significativamente menor em comparação com a Máquina ${maquinaAlternativa} (${cvAlternativa.toFixed(2)}%).</p>
+            
+            <h4>Recomendação como Engenheiro Mecatrônico:</h4>
+            <p>Com base na análise estatística, <strong>recomenda-se a aquisição da Máquina ${maquinaRecomendada}</strong>.</p>
+            <p>Embora a Máquina ${maquinaAlternativa} tenha uma produção média horária ligeiramente superior (${mediaAlternativa.toFixed(2)} peças/hora) em comparação com a Máquina ${maquinaRecomendada} (${mediaRecomendada.toFixed(2)} peças/hora), a Máquina ${maquinaRecomendada} possui uma variabilidade consideravelmente menor, como indicado pelo seu menor Coeficiente de Variação (${cvRecomendada.toFixed(2)}%).</p>
+            <p>Uma menor variabilidade (menor CV) é crucial em um ambiente de produção por várias razões:</p>
+            <ul>
+                <li><strong>Previsibilidade:</strong> Torna a produção mais previsível, facilitando o planejamento e o cumprimento de metas.</li>
+                <li><strong>Qualidade:</strong> Processos mais consistentes tendem a resultar em produtos com qualidade mais uniforme.</li>
+                <li><strong>Custos:</strong> Menor variabilidade pode levar à redução de desperdícios e retrabalho.</li>
+                <li><strong>Atendimento à Demanda:</strong> Uma produção estável garante uma capacidade mais confiável para atender à demanda do mercado.</li>
+            </ul>
+            <p>Portanto, a maior consistência da Máquina ${maquinaRecomendada} a torna a escolha mais estratégica para a renovação do parque fabril, visando uma operação mais estável e confiável a longo prazo, mesmo que sua média de produção seja marginalmente inferior neste conjunto de dados.</p>
+        `;
+    } else { // CVs are equal
+        recomendacaoHTML += `
+            <p>Ambas as máquinas apresentam Coeficientes de Variação idênticos (${metricasX.cv.toFixed(2)}%).</p>
+            <h4>Recomendação como Engenheiro Mecatrônico:</h4>
+            <p>Com base na análise estatística, ambas as máquinas apresentam a mesma variabilidade relativa. Neste caso, a decisão pode ser baseada em outros fatores:</p>
+            <ul>
+                <li><strong>Produção Média:</strong> A Máquina Y (${metricasY.mean.toFixed(2)} peças/hora) tem uma média ligeiramente superior à Máquina X (${metricasX.mean.toFixed(2)} peças/hora). Se o volume de produção for o fator crítico, a Máquina Y pode ser preferível.</li>
+                <li><strong>Outros Fatores:</strong> Custo de aquisição (mencionado como igual neste problema), custos de manutenção, facilidade de operação, suporte do fornecedor, e requisitos específicos de qualidade devem ser considerados.</li>
+            </ul>
+            <p>Se a prioridade for maximizar a produção média e a variabilidade é idêntica, a Máquina Y seria a escolha. Contudo, se houver outros fatores não quantificados que favoreçam a Máquina X, a decisão pode pender para ela, dado que a estabilidade é a mesma.</p>
+        `;
+    }
+    
+    recomendacaoHTML += `
+        <h4>Ferramentas Computacionais Empregadas:</h4>
+        <p>Para estes cálculos, poderiam ser empregadas ferramentas computacionais como Microsoft Excel (com funções como MÉDIA, VAR.P, DESVPAD.P, e cálculo manual do CV), Google Sheets, ou linguagens de programação com bibliotecas estatísticas como Python (com NumPy/Pandas) ou R. Os gráficos podem ser gerados usando estas mesmas ferramentas ou bibliotecas específicas de visualização como Matplotlib/Seaborn em Python ou Plotly.js (como utilizado nesta página).</p>
+    `;
+    interpretacaoDiv.innerHTML = recomendacaoHTML;
+
+    // 4. Call charting function
+    gerarGraficoComparativoCV(metricasX.cv, metricasY.cv);
+
+    // 5. Make results section visible
+    document.getElementById('resultados-analise-maquinas').style.display = 'block';
+}
+
+function gerarGraficoComparativoCV(cvX, cvY) {
+    const data = [{
+        x: ['Máquina X', 'Máquina Y'],
+        y: [cvX, cvY],
+        type: 'bar',
+        text: [cvX.toFixed(2) + '%', cvY.toFixed(2) + '%'],
+        textposition: 'auto',
+        marker: {
+            color: ['#667eea', '#f093fb'],
+            line: {
+                color: 'rgba(0,0,0,0.5)',
+                width: 1
+            }
+        },
+        hoverinfo: 'x+y'
+    }];
+    const layout = {
+        title: 'Comparação do Coeficiente de Variação (CV)',
+        yaxis: { 
+            title: 'CV (%)',
+            ticksuffix: '%'
+        },
+        xaxis: {
+            title: 'Máquinas'
+        },
+        font: { family: 'Inter, sans-serif' },
+        margin: { t: 50, r: 30, b: 50, l: 50 },
+        bargap: 0.3
+    };
+    Plotly.newPlot('graficos-maquinas', data, layout, {responsive: true});
+}
+
+// Garantir que a função esteja acessível globalmente se não estiver usando módulos
+window.processarAnaliseMaquinas = processarAnaliseMaquinas;
