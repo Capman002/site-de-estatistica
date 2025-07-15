@@ -46,18 +46,6 @@
                         Análise de Variabilidade de Máquinas
                     </a>
                 </li>
-                <li class="nav-tab-item">
-                    <a href="#" class="nav-tab" data-tab="correlacao">
-                        <i class="fas fa-chart-line"></i>
-                        Correlação Linear Simples
-                    </a>
-                </li>
-                <li class="nav-tab-item">
-                    <a href="#" class="nav-tab" data-tab="regressao">
-                        <i class="fas fa-chart-area"></i>
-                        Regressão Linear
-                    </a>
-                </li>
             </ul>
         </div>
 
@@ -365,115 +353,6 @@
                             <h3><i class="fas fa-lightbulb"></i> Análise do Tipo de Distribuição</h3>
                             <div id="analise-distribuicao"></div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ATIVIDADE 2025.1: CORRELAÇÃO LINEAR SIMPLES -->
-        <div id="correlacao" class="tab-content">
-            <div class="activity-card">
-                <div class="activity-header">
-                    <h2><i class="fas fa-chart-line"></i> Atividade 2025.1: Correlação Linear Simples</h2>
-                    <p>Análise de Desempenho de Máquina Industrial</p>
-                </div>
-                <div class="activity-content">
-                    <div class="enunciado">
-                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
-                        <p>Os dados a seguir provêm de um experimento para testar o desempenho de uma máquina industrial. O experimento utilizou como fonte de combustível uma mistura de óleo diesel e gás, derivados de materiais destilados orgânicos. O valor da capacidade da máquina em cavalo vapor (HP) foi coletado a diversas velocidades medidas em rotações por minuto (rpm × 100), totalizando 24 pares de valores.</p>
-                        <br>
-                        <strong>Pede-se:</strong>
-                        <ul style="margin-left: 20px; margin-top: 10px;">
-                            <li>1) Indique a Variável Dependente e a Variável Independente;</li>
-                            <li>2) Construir as Hipóteses de associação;</li>
-                            <li>3) Indique se há associação entre as variáveis empregando: Gráfico de Dispersão e Coeficiente de Correlação Linear de Pearson;</li>
-                            <li>4) Verificar a Significância Estatística (usar o critério de 5%, isto é: α = 0,05);</li>
-                            <li>5) Verificar a necessidade de obter o Coeficiente de Correlação de Spearman.</li>
-                        </ul>
-                    </div>
-
-                    <div class="data-input-section">
-                        <h3><i class="fas fa-keyboard"></i> Inserção de Dados</h3>
-                        <div class="input-group">
-                            <label for="rpmData">Dados de RPM (x100):</label>
-                            <textarea id="rpmData" class="data-textarea" placeholder="20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43"></textarea>
-                        </div>
-                        <div class="input-group">
-                            <label for="hpData">Dados de HP:</label>
-                            <textarea id="hpData" class="data-textarea" placeholder="18, 17, 19, 21, 20, 22, 24, 23, 25, 27, 26, 28, 30, 29, 31, 33, 32, 34, 36, 35, 37, 38, 37, 39"></textarea>
-                        </div>
-                        <button class="btn" onclick="processarCorrelacao()">
-                            <i class="fas fa-play"></i>
-                            Analisar Correlação
-                        </button>
-                    </div>
-
-                    <div id="resultados-correlacao" class="results-section" style="display: none;">
-                        <h3><i class="fas fa-chart-line"></i> Resultados da Análise de Correlação</h3>
-                        <div id="variaveis-correlacao"></div>
-                        <div id="hipoteses-correlacao"></div>
-                        <div id="grafico-dispersao" class="chart-container"></div>
-                        <div id="coeficiente-correlacao"></div>
-                        <div id="significancia-estatistica"></div>
-                        <div id="necessidade-spearman"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ATIVIDADE 2025.1: REGRESSÃO LINEAR -->
-        <div id="regressao" class="tab-content">
-            <div class="activity-card">
-                <div class="activity-header">
-                    <h2><i class="fas fa-chart-area"></i> Atividade 2025.1: Regressão Linear</h2>
-                    <p>Análise de Desempenho de Máquina Industrial</p>
-                </div>
-                <div class="activity-content">
-                    <div class="enunciado">
-                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
-                        <p>Os dados a seguir provêm de um experimento para testar o desempenho de uma máquina industrial. O experimento utilizou uma mistura de óleo diesel e gás, derivados de materiais destilados orgânicos. O valor da capacidade da máquina em cavalo vapor (HP) foi coletado a diversas velocidades medidas em rotações por minuto (rpm × 100), totalizando 24 pares de valores.</p>
-                        <br>
-                        <strong>Pede-se:</strong>
-                        <ul style="margin-left: 20px; margin-top: 10px;">
-                            <li>Crie as Hipóteses (vale 2,00 pontos)</li>
-                            <li>Determine A EQUAÇÃO DE REGRESSÃO (vale 2,00 pontos)</li>
-                            <li>INTERPRETE AS INFORMAÇÕES da aplicação da regressão, CONSIDERANDO:</li>
-                            <ul style="margin-left: 20px; margin-top: 10px;">
-                                <li>Analise P-valor da regressão - (Vale 2,00 pontos)</li>
-                                <li>Análise de resíduos – escolha um par ordenado oriundo das medições e aplique da equação de regressão - (Vale 2,00 pontos)</li>
-                                <li>Coeficiente de determinação (R²) - (Vale 2,00 pontos)</li>
-                            </ul>
-                        </ul>
-                    </div>
-
-                    <div class="data-input-section">
-                        <h3><i class="fas fa-keyboard"></i> Inserção de Dados</h3>
-                        <div class="input-group">
-                            <label for="rpmDataReg">Dados de RPM (x100):</label>
-                            <textarea id="rpmDataReg" class="data-textarea" placeholder="20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43"></textarea>
-                        </div>
-                        <div class="input-group">
-                            <label for="hpDataReg">Dados de HP:</label>
-                            <textarea id="hpDataReg" class="data-textarea" placeholder="18, 17, 19, 21, 20, 22, 24, 23, 25, 27, 26, 28, 30, 29, 31, 33, 32, 34, 36, 35, 37, 38, 37, 39"></textarea>
-                        </div>
-                        <button class="btn" onclick="processarRegressao()">
-                            <i class="fas fa-play"></i>
-                            Analisar Regressão
-                        </button>
-                        <button class="btn" onclick="carregarDadosExemploRegressao()">
-                            <i class="fas fa-download"></i>
-                            Carregar Dados Exemplo
-                        </button>
-                    </div>
-
-                    <div id="resultados-regressao" class="results-section" style="display: none;">
-                        <h3><i class="fas fa-chart-line"></i> Resultados da Análise de Regressão</h3>
-                        <div id="hipoteses-regressao"></div>
-                        <div id="equacao-regressao"></div>
-                        <div id="grafico-regressao" class="chart-container"></div>
-                        <div id="p-valor-regressao"></div>
-                        <div id="analise-residuos"></div>
-                        <div id="coeficiente-determinacao"></div>
                     </div>
                 </div>
             </div>
