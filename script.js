@@ -1208,6 +1208,8 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarDadosExemplo3();
     // Carregar o enunciado da Atividade 4
     carregarEnunciadoAnaliseMaquinas();
+    // Processar a análise de correlação automaticamente
+    processarCorrelacao();
 });
 
 // Helper function para formatar números
@@ -1481,36 +1483,11 @@ function gerarGraficoComparativoCV(cvX, cvY) {
 // Garantir que a função esteja acessível globalmente se não estiver usando módulos
 window.processarAnaliseMaquinas = processarAnaliseMaquinas;
 
-function carregarDadosExemplo5() {
-    document.getElementById('dadosX').value = dadosCorrelacaoExemplo.x.join(', ');
-    document.getElementById('dadosY').value = dadosCorrelacaoExemplo.y.join(', ');
-}
-
 // ATIVIDADE 5: Correlação Linear
 function processarCorrelacao() {
     try {
-        const dadosX = document.getElementById('dadosX').value
-            .split(',')
-            .map(x => parseFloat(x.trim()))
-            .filter(x => !isNaN(x));
-
-        const dadosY = document.getElementById('dadosY').value
-            .split(',')
-            .map(y => parseFloat(y.trim()))
-            .filter(y => !isNaN(y));
-
-        if (dadosX.length !== dadosY.length) {
-            alert('As variáveis X e Y devem ter o mesmo número de elementos.');
-            return;
-        }
-
-        if (dadosX.length < 2) {
-            alert('Insira pelo menos dois pares de dados.');
-            return;
-        }
-
-        const x = dadosX;
-        const y = dadosY;
+        const x = dadosCorrelacaoExemplo.x;
+        const y = dadosCorrelacaoExemplo.y;
 
         // Usar TensorFlow.js para cálculos
         const xTensor = tf.tensor1d(x);
