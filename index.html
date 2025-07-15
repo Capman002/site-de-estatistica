@@ -21,26 +21,38 @@
         </div>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('distribuicao')">
-                <i class="fas fa-chart-pie"></i>
-                Distribuição de Frequência
-            </button>
-            <button class="nav-tab" onclick="showTab('boxplot')">
-                <i class="fas fa-chart-bar"></i>
-                Boxplot & Histogramas
-            </button>
-            <button class="nav-tab" onclick="showTab('histograma')">
-                <i class="fas fa-chart-area"></i>
-                Tempo de Falha
-            </button>
-            <button class="nav-tab" onclick="showTab('analiseMaquinas')">
-                <i class="fas fa-balance-scale"></i> <!-- Or another appropriate icon -->
-                Análise de Variabilidade de Máquinas
-            </button>
-            <button class="nav-tab" onclick="showTab('correlacao')">
-                <i class="fas fa-chart-line"></i>
-                Correlação Linear Simples
-            </button>
+            <ul class="nav-tab-list">
+                <li class="nav-tab-item">
+                    <a href="#" class="nav-tab active" data-tab="distribuicao">
+                        <i class="fas fa-chart-pie"></i>
+                        Distribuição de Frequência
+                    </a>
+                </li>
+                <li class="nav-tab-item">
+                    <a href="#" class="nav-tab" data-tab="boxplot">
+                        <i class="fas fa-chart-bar"></i>
+                        Boxplot & Histogramas
+                    </a>
+                </li>
+                <li class="nav-tab-item">
+                    <a href="#" class="nav-tab" data-tab="histograma">
+                        <i class="fas fa-chart-area"></i>
+                        Tempo de Falha
+                    </a>
+                </li>
+                <li class="nav-tab-item">
+                    <a href="#" class="nav-tab" data-tab="analiseMaquinas">
+                        <i class="fas fa-balance-scale"></i>
+                        Análise de Variabilidade de Máquinas
+                    </a>
+                </li>
+                <li class="nav-tab-item">
+                    <a href="#" class="nav-tab" data-tab="correlacao">
+                        <i class="fas fa-chart-line"></i>
+                        Correlação Linear Simples
+                    </a>
+                </li>
+            </ul>
         </div>
 
         <!-- ATIVIDADE 1: DISTRIBUIÇÃO DE FREQUÊNCIA -->

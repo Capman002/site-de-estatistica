@@ -63,11 +63,19 @@
             overflow-x: auto;
         }
 
+        .nav-tab-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-tab-item {
+            margin: 0 5px;
+        }
+
         .nav-tab {
             background: transparent;
             border: none;
             padding: 15px 30px;
-            margin: 0 5px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
@@ -76,6 +84,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
         }
 
         .nav-tab:hover {

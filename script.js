@@ -25,9 +25,18 @@ function showTab(tabName) {
     // Mostrar aba selecionada
     document.getElementById(tabName).classList.add('active');
     
-    // Adicionar classe active ao botão
-    event.target.classList.add('active');
+    // Adicionar classe active ao link da aba
+    document.querySelector(`.nav-tab[data-tab="${tabName}"]`).classList.add('active');
 }
+
+// Adicionar event listener para as abas
+document.querySelector('.nav-tab-list').addEventListener('click', function(e) {
+    if (e.target.classList.contains('nav-tab')) {
+        e.preventDefault();
+        const tabName = e.target.dataset.tab;
+        showTab(tabName);
+    }
+});
 
 // Funções para carregar dados exemplo
 function carregarDadosExemplo1() {
