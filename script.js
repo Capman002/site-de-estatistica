@@ -10,6 +10,13 @@ const dadosMaquinasAnalise = {
     Y: [25, 26, 55, 52, 48, 24, 34, 47, 50, 47]  // Soma 408
 };
 
+const dadosCorrelacaoExemplo = [
+    22.0, 64.03, 20.0, 62.47, 18.0, 54.94, 16.0, 48.84, 14.0, 43.73, 12.0, 37.48,
+    15.0, 46.85, 17.0, 51.17, 19.0, 58.00, 21.0, 63.21, 22.0, 64.03, 20.0, 62.63,
+    18.0, 52.90, 16.0, 48.84, 14.0, 42.74, 12.0, 36.63, 10.5, 32.05, 13.0, 39.68,
+    15.0, 45.79, 17.0, 51.17, 19.0, 56.65, 21.0, 62.61, 23.0, 65.31, 24.0, 63.89
+];
+
 // Função para trocar abas
 function showTab(tabName) {
     // Esconder todas as abas
@@ -1475,6 +1482,202 @@ function gerarGraficoComparativoCV(cvX, cvY) {
 
 // Garantir que a função esteja acessível globalmente se não estiver usando módulos
 window.processarAnaliseMaquinas = processarAnaliseMaquinas;
+
+function carregarDadosExemplo5() {
+    document.getElementById('dadosCorrelacao').value = dadosCorrelacaoExemplo.join(', ');
+}
+
+// ATIVIDADE 5: Correlação Linear
+function processarCorrelacao() {
+    try {
+        const dados = document.getElementById('dadosCorrelacao').value
+            .split(',')
+            .map(x => parseFloat(x.trim()))
+            .filter(x => !isNaN(x));
+
+        if (dados.length % 2 !== 0) {
+            alert('O número de valores deve ser par (pares X,Y).');
+            return;
+        }
+
+        const x = dados.filter((_, i) => i % 2 === 0);
+        const y = dados.filter((_, i) => i % 2 !== 0);
+
+        if (x.length < 2) {
+            alert('Insira pelo menos dois pares de dados.');
+            return;
+        }
+
+        // Usar TensorFlow.js para cálculos
+        const xTensor = tf.tensor1d(x);
+        const yTensor = tf.tensor1d(y);
+
+        const meanX = tf.mean(xTensor).dataSync()[0];
+        const meanY = tf.mean(yTensor).dataSync()[0];
+
+        const pearsonR = tf.sum(tf.mul(tf.sub(xTensor, meanX), tf.sub(yTensor, meanY))).div(
+            tf.sqrt(tf.sum(tf.square(tf.sub(xTensor, meanX)))).mul(tf.sqrt(tf.sum(tf.square(tf.sub(yTensor, meanY)))))
+        ).dataSync()[0];
+
+        // Exibir resultados
+        document.getElementById('resultados-correlacao').style.display = 'block';
+        exibirVariaveis();
+        exibirHipoteses();
+        criarGraficoDispersao(x, y);
+        exibirCoeficientePearson(pearsonR);
+        exibirSignificancia(pearsonR, x.length);
+        exibirAnaliseSpearman();
+
+    } catch (error) {
+        alert('Erro ao processar dados: ' + error.message);
+    }
+}
+
+function exibirVariaveis() {
+    document.getElementById('variaveis-correlacao').innerHTML = `
+        <h4>1) Variáveis</h4>
+        <p><strong>Variável Independente (X):</strong> Velocidade (rpm × 100)</p>
+        <p><strong>Variável Dependente (Y):</strong> Capacidade (HP)</p>
+    `;
+}
+
+function exibirHipoteses() {
+    document.getElementById('hipoteses-correlacao').innerHTML = `
+        <h4>2) Hipóteses de Associação</h4>
+        <p><strong>Hipótese Nula (H₀):</strong> Não existe correlação linear entre a velocidade e a capacidade da máquina (ρ = 0).</p>
+        <p><strong>Hipótese Alternativa (H₁):</strong> Existe correlação linear entre a velocidade e a capacidade da máquina (ρ ≠ 0).</p>
+    `;
+}
+
+function criarGraficoDispersao(x, y) {
+    const trace = {
+        x: x,
+        y: y,
+        mode: 'markers',
+        type: 'scatter',
+        marker: { color: '#667eea' }
+    };
+
+    const layout = {
+        title: 'Gráfico de Dispersão: Velocidade vs. Capacidade',
+        xaxis: { title: 'Velocidade (rpm × 100)' },
+        yaxis: { title: 'Capacidade (HP)' }
+    };
+
+    Plotly.newPlot('grafico-dispersao-correlacao', [trace], layout);
+}
+
+function exibirCoeficientePearson(r) {
+    let grau = '';
+    if (Math.abs(r) >= 0.9) grau = 'Fortíssima';
+    else if (Math.abs(r) >= 0.7) grau = 'Forte';
+    else if (Math.abs(r) >= 0.5) grau = 'Moderada';
+    else if (Math.abs(r) >= 0.3) grau = 'Fraca';
+    else grau = 'Muito Fraca';
+
+    document.getElementById('coeficiente-pearson-correlacao').innerHTML = `
+        <h4>3) Coeficiente de Correlação de Pearson (r)</h4>
+        <p><strong>Valor de r:</strong> ${r.toFixed(4)}</p>
+        <p><strong>Grau de Associação:</strong> ${grau}</p>
+        <p>Indica uma correlação linear positiva ${grau.toLowerCase()}.</p>
+    `;
+}
+
+function exibirSignificancia(r, n) {
+    const t = r * Math.sqrt((n - 2) / (1 - r * r));
+    const pValor = 2 * (1 - tDist(Math.abs(t), n - 2)); // Two-tailed test
+
+    let resultado = '';
+    if (pValor < 0.05) {
+        resultado = '<strong style="color: green;">Rejeita-se H₀.</strong> A correlação é estatisticamente significante.';
+    } else {
+        resultado = '<strong style="color: red;">Não se rejeita H₀.</strong> A correlação não é estatisticamente significante.';
+    }
+
+    document.getElementById('significancia-correlacao').innerHTML = `
+        <h4>4) Significância Estatística (α = 0,05)</h4>
+        <p><strong>Estatística t:</strong> ${t.toFixed(4)}</p>
+        <p><strong>P-valor:</strong> ${pValor.toFixed(4)}</p>
+        <p>${resultado}</p>
+    `;
+}
+
+function exibirAnaliseSpearman() {
+    document.getElementById('coeficiente-spearman-correlacao').innerHTML = `
+        <h4>5) Coeficiente de Correlação de Spearman</h4>
+        <p>O Coeficiente de Spearman seria necessário se a relação entre as variáveis não fosse linear ou se os dados contivessem outliers significativos. Dado o gráfico de dispersão e o alto valor de r de Pearson, a correlação linear parece apropriada e o cálculo de Spearman não é estritamente necessário, mas poderia confirmar a força da relação monotônica.</p>
+    `;
+}
+
+// Approximation of T-distribution CDF
+function tDist(t, df) {
+    // A simple approximation for the CDF of the t-distribution
+    let a = df / 2;
+    let x = t * t / (t * t + df);
+
+    function betaInc(x, a, b) {
+        // Incomplete beta function - using a simplified approximation
+        if (x === 0) return 0;
+        if (x === 1) return 1;
+
+        let bt = Math.exp(gammaLn(a + b) - gammaLn(a) - gammaLn(b) + a * Math.log(x) + b * Math.log(1 - x));
+        if (x < (a + 1) / (a + b + 2)) {
+            return bt * betacf(x, a, b) / a;
+        } else {
+            return 1 - bt * betacf(1 - x, b, a) / b;
+        }
+    }
+
+    function betacf(x, a, b) {
+        let MAXIT = 100;
+        let EPS = 3.0e-7;
+        let FPMIN = 1.0e-30;
+
+        let qab = a + b;
+        let qap = a + 1;
+        let qam = a - 1;
+
+        let c = 1;
+        let d = 1 - qab * x / qap;
+        if (Math.abs(d) < FPMIN) d = FPMIN;
+        d = 1 / d;
+        let h = d;
+
+        for (let m = 1; m <= MAXIT; m++) {
+            let m2 = 2 * m;
+            let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+            d = 1 + aa * d;
+            if (Math.abs(d) < FPMIN) d = FPMIN;
+            c = 1 + aa / c;
+            if (Math.abs(c) < FPMIN) c = FPMIN;
+            d = 1 / d;
+            h *= (d * c);
+            aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+            d = 1 + aa * d;
+            if (Math.abs(d) < FPMIN) d = FPMIN;
+            c = 1 + aa / c;
+            if (Math.abs(c) < FPMIN) c = FPMIN;
+            d = 1 / d;
+            let del = h * (d * c);
+            h = del;
+            if (Math.abs(del - 1.0) < EPS) break;
+        }
+        return h;
+    }
+
+    function gammaLn(xx) {
+        let cof = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5];
+        let x = xx;
+        let y = x;
+        let tmp = x + 5.5;
+        tmp -= (x + 0.5) * Math.log(tmp);
+        let ser = 1.000000000190015;
+        for (let j = 0; j < 6; j++) ser += cof[j] / ++y;
+        return -tmp + Math.log(2.5066282746310005 * ser / x);
+    }
+
+    return 1 - 0.5 * betaInc(x, a, 0.5);
+}
 
 // Garantir que a função esteja acessível globalmente se não estiver usando módulos
 window.processarAnaliseMaquinas = processarAnaliseMaquinas;
