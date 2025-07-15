@@ -8,7 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.18.2/plotly.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -38,6 +37,10 @@
                 <li class="nav-tab" onclick="showTab('analiseMaquinas', this)">
                     <i class="fas fa-balance-scale"></i>
                     Análise de Variabilidade de Máquinas
+                </li>
+                <li class="nav-tab" onclick="showTab('correlacao', this)">
+                    <i class="fas fa-chart-line"></i>
+                    Correlação Linear Simples
                 </li>
                 <li class="nav-tab" onclick="showTab('tensorflow', this)">
                     <i class="fas fa-robot"></i>
@@ -380,6 +383,57 @@
                         <h3><i class="fas fa-chart-line"></i> Resultados do Treinamento</h3>
                         <div id="log-treinamento"></div>
                         <div id="grafico-tensorflow" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATIVIDADE 2025.1: CORRELAÇÃO LINEAR SIMPLES -->
+        <div id="correlacao" class="tab-content">
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h2><i class="fas fa-chart-line"></i> Atividade 2025.1: Correlação Linear Simples</h2>
+                    <p>Análise de Desempenho de Máquina Industrial</p>
+                </div>
+                <div class="activity-content">
+                    <div class="enunciado">
+                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
+                        <p>Os dados a seguir provêm de um experimento para testar o desempenho de uma máquina industrial. O experimento utilizou como fonte de combustível uma mistura de óleo diesel e gás, derivados de materiais destilados orgânicos. O valor da capacidade da máquina em cavalo vapor (HP) foi coletado a diversas velocidades medidas em rotações por minuto (rpm × 100), totalizando 24 pares de valores.</p>
+                        <br>
+                        <strong>Pede-se:</strong>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>1) Indique a Variável Dependente e a Variável Independente;</li>
+                            <li>2) Construir as Hipóteses de associação;</li>
+                            <li>3) Indique se há associação entre as variáveis empregando: Gráfico de Dispersão e Coeficiente de Correlação Linear de Pearson;</li>
+                            <li>4) Verificar a Significância Estatística (usar o critério de 5%, isto é: α = 0,05);</li>
+                            <li>5) Verificar a necessidade de obter o Coeficiente de Correlação de Spearman.</li>
+                        </ul>
+                    </div>
+
+                    <div class="data-input-section">
+                        <h3><i class="fas fa-keyboard"></i> Inserção de Dados</h3>
+                        <div class="input-group">
+                            <label for="rpmData">Dados de RPM (x100):</label>
+                            <textarea id="rpmData" class="data-textarea" placeholder="20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="hpData">Dados de HP:</label>
+                            <textarea id="hpData" class="data-textarea" placeholder="18, 17, 19, 21, 20, 22, 24, 23, 25, 27, 26, 28, 30, 29, 31, 33, 32, 34, 36, 35, 37, 38, 37, 39"></textarea>
+                        </div>
+                        <button class="btn" onclick="processarCorrelacao()">
+                            <i class="fas fa-play"></i>
+                            Analisar Correlação
+                        </button>
+                    </div>
+
+                    <div id="resultados-correlacao" class="results-section" style="display: none;">
+                        <h3><i class="fas fa-chart-line"></i> Resultados da Análise de Correlação</h3>
+                        <div id="variaveis-correlacao"></div>
+                        <div id="hipoteses-correlacao"></div>
+                        <div id="grafico-dispersao" class="chart-container"></div>
+                        <div id="coeficiente-correlacao"></div>
+                        <div id="significancia-estatistica"></div>
+                        <div id="necessidade-spearman"></div>
                     </div>
                 </div>
             </div>

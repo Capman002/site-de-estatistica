@@ -11,7 +11,7 @@ const dadosMaquinasAnalise = {
 };
 
 // Função para trocar abas
-function showTab(tabName, element) {
+function showTab(tabName) {
     // Esconder todas as abas
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
@@ -26,7 +26,7 @@ function showTab(tabName, element) {
     document.getElementById(tabName).classList.add('active');
     
     // Adicionar classe active ao botão
-    element.classList.add('active');
+    event.target.classList.add('active');
 }
 
 // Funções para carregar dados exemplo
