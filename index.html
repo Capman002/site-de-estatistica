@@ -46,6 +46,12 @@
                         Análise de Variabilidade de Máquinas
                     </a>
                 </li>
+                 <li class="nav-tab-item">
+                    <a href="#" class="nav-tab" data-tab="correlacao">
+                        <i class="fas fa-chart-line"></i>
+                        Correlação Linear
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -353,6 +359,54 @@
                             <h3><i class="fas fa-lightbulb"></i> Análise do Tipo de Distribuição</h3>
                             <div id="analise-distribuicao"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATIVIDADE 5: CORRELAÇÃO LINEAR -->
+        <div id="correlacao" class="tab-content">
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h2><i class="fas fa-chart-line"></i> Atividade 5: Correlação Linear Simples</h2>
+                    <p>Análise de Desempenho de Máquina Industrial</p>
+                </div>
+                <div class="activity-content">
+                    <div class="enunciado">
+                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
+                        <p>Análise do desempenho de uma máquina industrial (HP vs. RPM) para testar a associação entre velocidade e capacidade.</p>
+                        <strong>Pede-se:</strong>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>1) Indicar a Variável Dependente e a Variável Independente</li>
+                            <li>2) Construir as Hipóteses de associação</li>
+                            <li>3) Indicar se há associação entre as variáveis (Gráfico de Dispersão e Coeficiente de Pearson)</li>
+                            <li>4) Verificar a Significância Estatística (α = 0,05)</li>
+                            <li>5) Verificar a necessidade do Coeficiente de Spearman</li>
+                        </ul>
+                    </div>
+                    <div class="data-input-section">
+                        <h3><i class="fas fa-keyboard"></i> Inserção de Dados</h3>
+                        <div class="input-group">
+                            <label for="dadosCorrelacao">Dados (X,Y) separados por vírgula:</label>
+                            <textarea id="dadosCorrelacao" class="data-textarea" placeholder="22.0, 64.03, 20.0, 62.47, ..."></textarea>
+                        </div>
+                        <button class="btn" onclick="processarCorrelacao()">
+                            <i class="fas fa-play"></i>
+                            Analisar Correlação
+                        </button>
+                        <button class="btn" onclick="carregarDadosExemplo5()">
+                            <i class="fas fa-download"></i>
+                            Carregar Dados Exemplo
+                        </button>
+                    </div>
+                    <div id="resultados-correlacao" class="results-section" style="display: none;">
+                        <h3><i class="fas fa-chart-line"></i> Resultados da Análise de Correlação</h3>
+                        <div id="variaveis-correlacao"></div>
+                        <div id="hipoteses-correlacao"></div>
+                        <div id="grafico-dispersao-correlacao" class="chart-container"></div>
+                        <div id="coeficiente-pearson-correlacao"></div>
+                        <div id="significancia-correlacao"></div>
+                        <div id="coeficiente-spearman-correlacao"></div>
                     </div>
                 </div>
             </div>
