@@ -10,12 +10,10 @@ const dadosMaquinasAnalise = {
     Y: [25, 26, 55, 52, 48, 24, 34, 47, 50, 47]  // Soma 408
 };
 
-const dadosCorrelacaoExemplo = [
-    22.0, 64.03, 20.0, 62.47, 18.0, 54.94, 16.0, 48.84, 14.0, 43.73, 12.0, 37.48,
-    15.0, 46.85, 17.0, 51.17, 19.0, 58.00, 21.0, 63.21, 22.0, 64.03, 20.0, 62.63,
-    18.0, 52.90, 16.0, 48.84, 14.0, 42.74, 12.0, 36.63, 10.5, 32.05, 13.0, 39.68,
-    15.0, 45.79, 17.0, 51.17, 19.0, 56.65, 21.0, 62.61, 23.0, 65.31, 24.0, 63.89
-];
+const dadosCorrelacaoExemplo = {
+    x: [22.0, 20.0, 18.0, 16.0, 14.0, 12.0, 15.0, 17.0, 19.0, 21.0, 22.0, 20.0, 18.0, 16.0, 14.0, 12.0, 10.5, 13.0, 15.0, 17.0, 19.0, 21.0, 23.0, 24.0],
+    y: [64.03, 62.47, 54.94, 48.84, 43.73, 37.48, 46.85, 51.17, 58.00, 63.21, 64.03, 62.63, 52.90, 48.84, 42.74, 36.63, 32.05, 39.68, 45.79, 51.17, 56.65, 62.61, 65.31, 63.89]
+};
 
 // Função para trocar abas
 function showTab(tabName) {
@@ -1484,29 +1482,35 @@ function gerarGraficoComparativoCV(cvX, cvY) {
 window.processarAnaliseMaquinas = processarAnaliseMaquinas;
 
 function carregarDadosExemplo5() {
-    document.getElementById('dadosCorrelacao').value = dadosCorrelacaoExemplo.join(', ');
+    document.getElementById('dadosX').value = dadosCorrelacaoExemplo.x.join(', ');
+    document.getElementById('dadosY').value = dadosCorrelacaoExemplo.y.join(', ');
 }
 
 // ATIVIDADE 5: Correlação Linear
 function processarCorrelacao() {
     try {
-        const dados = document.getElementById('dadosCorrelacao').value
+        const dadosX = document.getElementById('dadosX').value
             .split(',')
             .map(x => parseFloat(x.trim()))
             .filter(x => !isNaN(x));
 
-        if (dados.length % 2 !== 0) {
-            alert('O número de valores deve ser par (pares X,Y).');
+        const dadosY = document.getElementById('dadosY').value
+            .split(',')
+            .map(y => parseFloat(y.trim()))
+            .filter(y => !isNaN(y));
+
+        if (dadosX.length !== dadosY.length) {
+            alert('As variáveis X e Y devem ter o mesmo número de elementos.');
             return;
         }
 
-        const x = dados.filter((_, i) => i % 2 === 0);
-        const y = dados.filter((_, i) => i % 2 !== 0);
-
-        if (x.length < 2) {
+        if (dadosX.length < 2) {
             alert('Insira pelo menos dois pares de dados.');
             return;
         }
+
+        const x = dadosX;
+        const y = dadosY;
 
         // Usar TensorFlow.js para cálculos
         const xTensor = tf.tensor1d(x);

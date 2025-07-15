@@ -374,7 +374,36 @@
                 <div class="activity-content">
                     <div class="enunciado">
                         <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
-                        <p>Análise do desempenho de uma máquina industrial (HP vs. RPM) para testar a associação entre velocidade e capacidade.</p>
+                        <p>Os dados a seguir provêm de um experimento para testar o desempenho de uma máquina industrial, utilizando como fonte de combustível uma mistura de óleo diesel e gás. O valor da capacidade da máquina em cavalo vapor (HP) foi coletado a diversas velocidades medidas em rotações por minuto (rpm × 100).</p>
+
+                        <h4><i class="fas fa-table"></i> Conjunto de Dados (X = Velocidade, Y = Capacidade)</h4>
+                        <div class="table-container">
+                            <table style="width:100%; text-align: center;">
+                                <thead>
+                                    <tr>
+                                        <th>X (Velocidade)</th>
+                                        <th>Y (Capacidade)</th>
+                                        <th>X (Velocidade)</th>
+                                        <th>Y (Capacidade)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>22.0</td><td>64.03</td><td>15.0</td><td>46.85</td></tr>
+                                    <tr><td>20.0</td><td>62.47</td><td>17.0</td><td>51.17</td></tr>
+                                    <tr><td>18.0</td><td>54.94</td><td>19.0</td><td>58.00</td></tr>
+                                    <tr><td>16.0</td><td>48.84</td><td>21.0</td><td>63.21</td></tr>
+                                    <tr><td>14.0</td><td>43.73</td><td>22.0</td><td>64.03</td></tr>
+                                    <tr><td>12.0</td><td>37.48</td><td>20.0</td><td>62.63</td></tr>
+                                    <tr><td>18.0</td><td>52.90</td><td>15.0</td><td>45.79</td></tr>
+                                    <tr><td>16.0</td><td>48.84</td><td>17.0</td><td>51.17</td></tr>
+                                    <tr><td>14.0</td><td>42.74</td><td>19.0</td><td>56.65</td></tr>
+                                    <tr><td>12.0</td><td>36.63</td><td>21.0</td><td>62.61</td></tr>
+                                    <tr><td>10.5</td><td>32.05</td><td>23.0</td><td>65.31</td></tr>
+                                    <tr><td>13.0</td><td>39.68</td><td>24.0</td><td>63.89</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
                         <strong>Pede-se:</strong>
                         <ul style="margin-left: 20px; margin-top: 10px;">
                             <li>1) Indicar a Variável Dependente e a Variável Independente</li>
@@ -386,9 +415,15 @@
                     </div>
                     <div class="data-input-section">
                         <h3><i class="fas fa-keyboard"></i> Inserção de Dados</h3>
-                        <div class="input-group">
-                            <label for="dadosCorrelacao">Dados (X,Y) separados por vírgula:</label>
-                            <textarea id="dadosCorrelacao" class="data-textarea" placeholder="22.0, 64.03, 20.0, 62.47, ..."></textarea>
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="dadosX">Dados da Variável X (Velocidade):</label>
+                                <textarea id="dadosX" class="data-textarea" placeholder="22.0, 20.0, 18.0, ..."></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="dadosY">Dados da Variável Y (Capacidade):</label>
+                                <textarea id="dadosY" class="data-textarea" placeholder="64.03, 62.47, 54.94, ..."></textarea>
+                            </div>
                         </div>
                         <button class="btn" onclick="processarCorrelacao()">
                             <i class="fas fa-play"></i>
