@@ -1631,3 +1631,159 @@ function verificarSignificancia(r, n) {
 
     return { tValue, pValue, ehSignificante };
 }
+
+// ATIVIDADE 2025.1: Regressão Linear
+async function processarRegressao() {
+    try {
+        const rpmData = document.getElementById('rpmDataReg').value
+            .split(',')
+            .map(x => parseFloat(x.trim()))
+            .filter(x => !isNaN(x));
+
+        const hpData = document.getElementById('hpDataReg').value
+            .split(',')
+            .map(x => parseFloat(x.trim()))
+            .filter(x => !isNaN(x));
+
+        if (rpmData.length !== hpData.length || rpmData.length === 0) {
+            alert('Os dois conjuntos de dados devem ter o mesmo número de observações e não podem estar vazios.');
+            return;
+        }
+
+        // 1. Hipóteses
+        const hipotesesDiv = document.getElementById('hipoteses-regressao');
+        hipotesesDiv.innerHTML = `
+            <h4>1) Hipóteses da Regressão</h4>
+            <p><strong>Hipótese Nula (H₀):</strong> Não há relação linear entre RPM e HP (o coeficiente angular da regressão, β₁, é igual a zero).</p>
+            <p><strong>Hipótese Alternativa (H₁):</strong> Existe uma relação linear entre RPM e HP (o coeficiente angular da regressão, β₁, é diferente de zero).</p>
+        `;
+
+        // 2. Equação de Regressão
+        const { model, rSquared } = await treinarModeloRegressao(rpmData, hpData);
+        const [a, b] = model.getWeights()[0].dataSync(); // b = intercepto, a = inclinação
+        const equacaoDiv = document.getElementById('equacao-regressao');
+        equacaoDiv.innerHTML = `
+            <h4>2) Equação de Regressão</h4>
+            <p>A equação de regressão linear simples é: <strong>HP = ${b.toFixed(4)} + ${a.toFixed(4)} * RPM</strong></p>
+            <p><strong>Interpretação:</strong></p>
+            <ul>
+                <li><strong>Intercepto (β₀ = ${b.toFixed(4)}):</strong> Valor esperado de HP quando o RPM é zero. (Pode não ter interpretação prática neste contexto).</li>
+                <li><strong>Coeficiente Angular (β₁ = ${a.toFixed(4)}):</strong> Para cada aumento de 100 RPM, espera-se um aumento de ${a.toFixed(4)} em HP.</li>
+            </ul>
+        `;
+
+        // 3. Gráfico de Regressão
+        gerarGraficoRegressao(rpmData, hpData, model, 'grafico-regressao');
+
+        // 4. P-valor da Regressão
+        const pValorDiv = document.getElementById('p-valor-regressao');
+        const { tValue, pValue, ehSignificante } = verificarSignificancia(Math.sqrt(rSquared), rpmData.length);
+        pValorDiv.innerHTML = `
+            <h4>4) Análise do P-valor da Regressão</h4>
+            <p>O p-valor associado ao coeficiente angular (β₁) nos ajuda a decidir se a relação é estatisticamente significante.</p>
+            <p><strong>Valor de t calculado:</strong> ${tValue.toFixed(4)}</p>
+            <p><strong>Valor-p (p-value):</strong> ${pValue.toExponential(4)}</p>
+            <p><strong>Conclusão:</strong> Como o p-valor (${pValue.toExponential(4)}) é muito menor que o nível de significância (α = 0,05), <strong>rejeitamos a hipótese nula</strong>.</p>
+            <p class="alert alert-success">Isso significa que a variável RPM é um preditor <strong>estatisticamente significante</strong> para a variável HP.</p>
+        `;
+
+        // 5. Análise de Resíduos
+        const residuosDiv = document.getElementById('analise-residuos');
+        const parOrdenadoIdx = 5; // Escolhendo o 6º par (índice 5) para análise
+        const rpmEscolhido = rpmData[parOrdenadoIdx];
+        const hpReal = hpData[parOrdenadoIdx];
+        const hpPrevisto = model.predict(tf.tensor2d([[rpmEscolhido]])).dataSync()[0];
+        const residuo = hpReal - hpPrevisto;
+        residuosDiv.innerHTML = `
+            <h4>5) Análise de Resíduos</h4>
+            <p>Analisando o par ordenado (RPM=${rpmEscolhido}, HP=${hpReal}):</p>
+            <p><strong>Valor Previsto (HP'):</strong> ${b.toFixed(4)} + ${a.toFixed(4)} * ${rpmEscolhido} = <strong>${hpPrevisto.toFixed(4)}</strong></p>
+            <p><strong>Resíduo (e):</strong> Valor Real - Valor Previsto = ${hpReal} - ${hpPrevisto.toFixed(4)} = <strong>${residuo.toFixed(4)}</strong></p>
+            <p><strong>Interpretação:</strong> O resíduo de ${residuo.toFixed(4)} indica que, para um RPM de ${rpmEscolhido}, o modelo subestimou o valor real de HP em aproximadamente ${Math.abs(residuo).toFixed(4)} unidades. A análise de todos os resíduos ajuda a avaliar o ajuste do modelo.</p>
+        `;
+
+        // 6. Coeficiente de Determinação (R²)
+        const r2Div = document.getElementById('coeficiente-determinacao');
+        r2Div.innerHTML = `
+            <h4>6) Coeficiente de Determinação (R²)</h4>
+            <p><strong>R²:</strong> ${rSquared.toFixed(4)} (${(rSquared * 100).toFixed(2)}%)</p>
+            <p><strong>Interpretação:</strong> Aproximadamente <strong>${(rSquared * 100).toFixed(2)}%</strong> da variabilidade na capacidade da máquina (HP) é explicada pela variabilidade na velocidade (RPM), de acordo com o nosso modelo linear.</p>
+        `;
+
+        document.getElementById('resultados-regressao').style.display = 'block';
+
+    } catch (error) {
+        alert('Erro ao processar a regressão: ' + error.message);
+        console.error(error);
+    }
+}
+
+async function treinarModeloRegressao(x, y) {
+    const xs = tf.tensor2d(x, [x.length, 1]);
+    const ys = tf.tensor2d(y, [y.length, 1]);
+
+    const model = tf.sequential();
+    model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+
+    model.compile({
+        optimizer: tf.train.sgd(0.001),
+        loss: 'meanSquaredError'
+    });
+
+    // Treinar o modelo
+    const history = await model.fit(xs, ys, {
+        epochs: 100,
+        callbacks: {
+            onEpochEnd: (epoch, log) => console.log(`Epoch ${epoch}: loss = ${log.loss}`)
+        }
+    });
+
+    // Calcular R²
+    const yPred = model.predict(xs);
+    const rSquared = tf.tidy(() => {
+        const yMean = ys.mean();
+        const ssTot = ys.sub(yMean).square().sum();
+        const ssRes = ys.sub(yPred).square().sum();
+        return tf.scalar(1).sub(ssRes.div(ssTot)).dataSync()[0];
+    });
+
+    return { model, rSquared };
+}
+
+function gerarGraficoRegressao(x, y, model, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    const traceOriginal = {
+        x: x,
+        y: y,
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Dados Originais',
+        marker: { color: '#667eea', size: 8 }
+    };
+
+    const xLinspace = tf.linspace(Math.min(...x), Math.max(...x), 100);
+    const yLinspace = model.predict(xLinspace.reshape([100, 1]));
+
+    const traceRegressao = {
+        x: xLinspace.dataSync(),
+        y: yLinspace.dataSync(),
+        mode: 'lines',
+        type: 'scatter',
+        name: 'Linha de Regressão',
+        line: { color: '#f5576c', width: 3 }
+    };
+
+    const layout = {
+        title: 'Gráfico de Regressão Linear: RPM vs. HP',
+        xaxis: { title: 'Velocidade (RPM x 100)' },
+        yaxis: { title: 'Capacidade (HP)' },
+        showlegend: true,
+        legend: { x: 0.01, y: 0.99 },
+        margin: { t: 50, r: 50, b: 50, l: 50 },
+        font: { family: 'Inter, sans-serif' }
+    };
+
+    Plotly.newPlot(containerId, [traceOriginal, traceRegressao], layout, {responsive: true});
+}
