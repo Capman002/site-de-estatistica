@@ -1787,3 +1787,10 @@ function gerarGraficoRegressao(x, y, model, containerId) {
 
     Plotly.newPlot(containerId, [traceOriginal, traceRegressao], layout, {responsive: true});
 }
+
+function carregarDadosExemploRegressao() {
+    const rpmData = [22.0, 20.0, 18.0, 16.0, 14.0, 12.0, 15.0, 17.0, 19.0, 21.0, 22.0, 20.0, 18.0, 16.0, 14.0, 12.0, 10.5, 13.0, 15.0, 17.0, 19.0, 21.0, 23.0, 24.0];
+    const hpData = [64.03, 62.47, 54.94, 48.84, 43.73, 37.48, 46.85, 51.17, 58.00, 63.21, 64.03, 62.63, 52.90, 48.84, 42.74, 36.63, 32.05, 39.68, 45.79, 51.17, 56.65, 62.61, 65.31, 63.89];
+    document.getElementById('rpmDataReg').value = rpmData.join(', ');
+    document.getElementById('hpDataReg').value = hpData.join(', ');
+}
