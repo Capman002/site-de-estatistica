@@ -11,7 +11,7 @@ const dadosMaquinasAnalise = {
 };
 
 // Função para trocar abas
-function showTab(tabName) {
+function showTab(tabName, element) {
     // Esconder todas as abas
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
@@ -26,7 +26,7 @@ function showTab(tabName) {
     document.getElementById(tabName).classList.add('active');
     
     // Adicionar classe active ao botão
-    event.target.classList.add('active');
+    element.classList.add('active');
 }
 
 // Funções para carregar dados exemplo
@@ -1466,3 +1466,70 @@ function gerarGraficoComparativoCV(cvX, cvY) {
 
 // Garantir que a função esteja acessível globalmente se não estiver usando módulos
 window.processarAnaliseMaquinas = processarAnaliseMaquinas;
+
+// ATIVIDADE 5: TensorFlow.js
+async function treinarModeloTensorFlow() {
+    const logDiv = document.getElementById('log-treinamento');
+    const graficoDiv = document.getElementById('grafico-tensorflow');
+    const resultadosDiv = document.getElementById('resultados-tensorflow');
+
+    logDiv.innerHTML = 'Iniciando treinamento...<br>';
+    resultadosDiv.style.display = 'block';
+
+    // Dados de exemplo (X: Tamanho da casa, Y: Preço)
+    const xs = tf.tensor2d([1, 2, 3, 4], [4, 1]);
+    const ys = tf.tensor2d([1, 1.5, 2, 2.5], [4, 1]);
+
+    // Criar o modelo
+    const model = tf.sequential();
+    model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+
+    // Compilar o modelo
+    model.compile({
+        loss: 'meanSquaredError',
+        optimizer: 'sgd'
+    });
+
+    // Treinar o modelo
+    await model.fit(xs, ys, {
+        epochs: 250,
+        callbacks: {
+            onEpochEnd: (epoch, logs) => {
+                logDiv.innerHTML += `Época ${epoch}: Perda = ${logs.loss.toFixed(4)}<br>`;
+                logDiv.scrollTop = logDiv.scrollHeight;
+            }
+        }
+    });
+
+    logDiv.innerHTML += '<br>Treinamento concluído!';
+
+    // Fazer previsões
+    const predictions = model.predict(xs);
+    const predValues = await predictions.data();
+
+    // Plotar resultados
+    const trace1 = {
+        x: await xs.data(),
+        y: await ys.data(),
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Dados Originais'
+    };
+
+    const trace2 = {
+        x: await xs.data(),
+        y: predValues,
+        mode: 'lines',
+        type: 'scatter',
+        name: 'Regressão Linear'
+    };
+
+    const layout = {
+        title: 'Regressão Linear com TensorFlow.js',
+        xaxis: { title: 'X' },
+        yaxis: { title: 'Y' },
+        font: { family: 'Inter, sans-serif' }
+    };
+
+    Plotly.newPlot(graficoDiv, [trace1, trace2], layout);
+}

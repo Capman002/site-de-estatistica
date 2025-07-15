@@ -8,6 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.18.2/plotly.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -21,22 +22,28 @@
         </div>
 
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('distribuicao')">
-                <i class="fas fa-chart-pie"></i>
-                Distribuição de Frequência
-            </button>
-            <button class="nav-tab" onclick="showTab('boxplot')">
-                <i class="fas fa-chart-bar"></i>
-                Boxplot & Histogramas
-            </button>
-            <button class="nav-tab" onclick="showTab('histograma')">
-                <i class="fas fa-chart-area"></i>
-                Tempo de Falha
-            </button>
-            <button class="nav-tab" onclick="showTab('analiseMaquinas')">
-                <i class="fas fa-balance-scale"></i> <!-- Or another appropriate icon -->
-                Análise de Variabilidade de Máquinas
-            </button>
+            <ul class="nav-tabs-list">
+                <li class="nav-tab active" onclick="showTab('distribuicao', this)">
+                    <i class="fas fa-chart-pie"></i>
+                    Distribuição de Frequência
+                </li>
+                <li class="nav-tab" onclick="showTab('boxplot', this)">
+                    <i class="fas fa-chart-bar"></i>
+                    Boxplot & Histogramas
+                </li>
+                <li class="nav-tab" onclick="showTab('histograma', this)">
+                    <i class="fas fa-chart-area"></i>
+                    Tempo de Falha
+                </li>
+                <li class="nav-tab" onclick="showTab('analiseMaquinas', this)">
+                    <i class="fas fa-balance-scale"></i>
+                    Análise de Variabilidade de Máquinas
+                </li>
+                <li class="nav-tab" onclick="showTab('tensorflow', this)">
+                    <i class="fas fa-robot"></i>
+                    TensorFlow.js
+                </li>
+            </ul>
         </div>
 
         <!-- ATIVIDADE 1: DISTRIBUIÇÃO DE FREQUÊNCIA -->
@@ -343,6 +350,36 @@
                             <h3><i class="fas fa-lightbulb"></i> Análise do Tipo de Distribuição</h3>
                             <div id="analise-distribuicao"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATIVIDADE 5: TENSORFLOW.JS -->
+        <div id="tensorflow" class="tab-content">
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h2><i class="fas fa-robot"></i> Atividade 5: TensorFlow.js</h2>
+                    <p>Exercício com TensorFlow.js</p>
+                </div>
+                <div class="activity-content">
+                    <div class="enunciado">
+                        <h3><i class="fas fa-info-circle"></i> Enunciado</h3>
+                        <p>Este é um exercício de exemplo usando TensorFlow.js para criar um modelo de regressão linear simples.</p>
+                    </div>
+
+                    <div class="data-input-section">
+                        <h3><i class="fas fa-cogs"></i> Parâmetros do Modelo</h3>
+                        <button class="btn" onclick="treinarModeloTensorFlow()">
+                            <i class="fas fa-play"></i>
+                            Treinar Modelo
+                        </button>
+                    </div>
+
+                    <div id="resultados-tensorflow" class="results-section" style="display: none;">
+                        <h3><i class="fas fa-chart-line"></i> Resultados do Treinamento</h3>
+                        <div id="log-treinamento"></div>
+                        <div id="grafico-tensorflow" class="chart-container"></div>
                     </div>
                 </div>
             </div>
